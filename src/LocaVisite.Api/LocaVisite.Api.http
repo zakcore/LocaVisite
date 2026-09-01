@@ -1,0 +1,54 @@
+@hote = http://localhost:5129
+
+### Catalogue public, sans authentification
+GET {{hote}}/api/logements
+
+### Catalogue public avec filtres
+GET {{hote}}/api/logements?ville=Saint-Jean-sur-Richelieu&loyerMax=1000&nbPiecesMin=3&type=Appartement
+
+### Fiche d'un logement
+GET {{hote}}/api/logements/1
+
+### Connexion du prepose
+# @name connexion
+POST {{hote}}/api/auth/connexion
+Content-Type: application/json
+
+{
+  "courriel": "prepose@locavisite.ca",
+  "motDePasse": "Test1234!"
+}
+
+### Creation d'un logement, reservee aux roles PREPOSE et GESTIONNAIRE
+POST {{hote}}/api/logements
+Content-Type: application/json
+Authorization: Bearer {{connexion.response.body.jeton}}
+
+{
+  "adresse": "12 rue Champlain",
+  "ville": "Saint-Jean-sur-Richelieu",
+  "codePostal": "J3B 1A1",
+  "type": "Maison",
+  "nbPieces": 6,
+  "loyerMensuel": 1600,
+  "description": "Maison avec cour."
+}
+
+### Modification d'un logement
+PUT {{hote}}/api/logements/1
+Content-Type: application/json
+Authorization: Bearer {{connexion.response.body.jeton}}
+
+{
+  "adresse": "125 rue Richelieu",
+  "ville": "Saint-Jean-sur-Richelieu",
+  "codePostal": "J3B 6X3",
+  "type": "Appartement",
+  "nbPieces": 4,
+  "loyerMensuel": 975,
+  "description": "Quatre et demi renove."
+}
+
+### Retrait logique : le statut passe a RETIRE
+DELETE {{hote}}/api/logements/1
+Authorization: Bearer {{connexion.response.body.jeton}}
