@@ -68,5 +68,46 @@ public static class Semeur
         }
 
         contexte.SaveChanges();
+
+        SemerDisponibilites(contexte);
+    }
+
+    /// <summary>
+    /// Donne à l'agent semé un horaire du lundi au vendredi, de 9:00 à 17:00,
+    /// pour que la recherche d'agents disponibles ait de quoi travailler.
+    /// </summary>
+    private static void SemerDisponibilites(LocaVisiteContext contexte)
+    {
+        var agent = contexte.Utilisateurs
+            .FirstOrDefault(u => u.Courriel == "agent@locavisite.ca");
+
+        if (agent is null)
+        {
+            return;
+        }
+
+        var joursDejaSemes = contexte.Disponibilites
+            .Where(d => d.IdUtilisateur == agent.IdUtilisateur)
+            .Select(d => d.JourSemaine)
+            .ToList();
+
+        // 1 = lundi ... 5 = vendredi, selon la convention de DayOfWeek.
+        for (var jour = 1; jour <= 5; jour++)
+        {
+            if (joursDejaSemes.Contains(jour))
+            {
+                continue;
+            }
+
+            contexte.Disponibilites.Add(new Disponibilite
+            {
+                IdUtilisateur = agent.IdUtilisateur,
+                JourSemaine = jour,
+                HeureDebut = new TimeOnly(9, 0),
+                HeureFin = new TimeOnly(17, 0)
+            });
+        }
+
+        contexte.SaveChanges();
     }
 }

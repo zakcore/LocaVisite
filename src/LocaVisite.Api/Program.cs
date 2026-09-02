@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using LocaVisite.Api.Data;
 using LocaVisite.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,7 +42,14 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<ServiceJeton>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // L'API retourne déjà les énumérations en texte (« DISPONIBLE ») :
+        // ce convertisseur les accepte aussi en entrée, sans quoi un aller-retour
+        // lecture puis écriture échouerait.
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 // --- Swagger, avec le bouton « Authorize » pour coller un jeton ---
 builder.Services.AddEndpointsApiExplorer();
