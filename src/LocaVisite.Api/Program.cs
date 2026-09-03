@@ -43,6 +43,23 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<ServiceJeton>();
 builder.Services.AddScoped<ServiceRechercheAgents>();
 
+// --- CORS : le serveur de développement Vite tourne sur un autre port que
+//     l'API, le navigateur refuse donc les appels sans cette autorisation. ---
+const string PolitiqueWeb = "ClientsWeb";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(PolitiqueWeb, politique =>
+    {
+        politique
+            .WithOrigins(
+                builder.Configuration.GetSection("OriginesAutorisees").Get<string[]>()
+                ?? ["http://localhost:5173"])
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -107,6 +124,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Avant l'authentification : la requête préalable (preflight) du navigateur
+// ne porte pas de jeton et doit tout de même recevoir une réponse.
+app.UseCors(PolitiqueWeb);
 
 app.UseAuthentication();
 app.UseAuthorization();
