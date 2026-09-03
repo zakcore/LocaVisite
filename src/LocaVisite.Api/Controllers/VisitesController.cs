@@ -1,6 +1,7 @@
 using LocaVisite.Api.Data;
 using LocaVisite.Api.Dtos;
 using LocaVisite.Api.Models;
+using LocaVisite.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ namespace LocaVisite.Api.Controllers;
 public class VisitesController : ControllerBase
 {
     private readonly LocaVisiteContext _contexte;
+    private readonly ServiceRechercheAgents _rechercheAgents;
 
-    public VisitesController(LocaVisiteContext contexte)
+    public VisitesController(LocaVisiteContext contexte, ServiceRechercheAgents rechercheAgents)
     {
         _contexte = contexte;
+        _rechercheAgents = rechercheAgents;
     }
 
     /// <summary>
@@ -224,6 +227,104 @@ public class VisitesController : ControllerBase
         }
 
         visite.DureePrevue = saisie.DureePrevue;
+        await _contexte.SaveChangesAsync();
+
+        return Ok(VisiteDto.Depuis(visite));
+    }
+
+    /// <summary>
+    /// Créneaux (agent, heure de début) qui conviennent à cette visite.
+    /// Le détail de l'algorithme est dans <see cref="ServiceRechercheAgents"/>.
+    /// </summary>
+    [HttpGet("{id:int}/agents-disponibles")]
+    [Authorize(Roles = "PREPOSE,GESTIONNAIRE")]
+    public async Task<ActionResult<AgentsDisponiblesDto>> AgentsDisponibles(int id)
+    {
+        var visite = await _contexte.Visites.FindAsync(id);
+
+        if (visite is null)
+        {
+            return NotFound(new { message = $"Aucune visite avec l'identifiant {id}." });
+        }
+
+        if (visite.Statut != StatutVisite.DEMANDEE)
+        {
+            return Conflict(new
+            {
+                message = $"Cette visite est au statut {visite.Statut} : "
+                          + "la recherche d'agents ne s'applique qu'aux visites DEMANDEE."
+            });
+        }
+
+        return Ok(await _rechercheAgents.ChercherAsync(visite));
+    }
+
+    /// <summary>
+    /// Assigne un agent à un créneau et fait passer la visite à ASSIGNEE.
+    /// </summary>
+    [HttpPost("{id:int}/assigner")]
+    [Authorize(Roles = "PREPOSE,GESTIONNAIRE")]
+    public async Task<ActionResult<VisiteDto>> Assigner(int id, [FromBody] AssignationDto saisie)
+    {
+        var visite = await _contexte.Visites
+            .Include(v => v.Logement)
+            .Include(v => v.Prospect)
+            .FirstOrDefaultAsync(v => v.IdVisite == id);
+
+        if (visite is null)
+        {
+            return NotFound(new { message = $"Aucune visite avec l'identifiant {id}." });
+        }
+
+        if (visite.Statut != StatutVisite.DEMANDEE)
+        {
+            return Conflict(new
+            {
+                message = $"Cette visite est au statut {visite.Statut} : "
+                          + "seule une visite DEMANDEE peut être assignée."
+            });
+        }
+
+        var agent = await _contexte.Utilisateurs.FindAsync(saisie.IdAgent);
+
+        if (agent is null)
+        {
+            return NotFound(new { message = $"Aucun utilisateur avec l'identifiant {saisie.IdAgent}." });
+        }
+
+        if (agent.Role != Role.AGENT)
+        {
+            return BadRequest(new
+            {
+                message = $"L'utilisateur {agent.IdUtilisateur} a le rôle {agent.Role} : "
+                          + "seul un agent peut se voir assigner une visite."
+            });
+        }
+
+        // Le créneau affiché au préposé a pu être pris entre-temps par un autre
+        // préposé. On ne fait donc pas confiance à ce que le client envoie : on
+        // refait la recherche et on vérifie que le créneau demandé y figure
+        // toujours.
+        var heureDemandee = saisie.HeureDebut.ToString("HH\\:mm");
+        var creneaux = await _rechercheAgents.ChercherTousLesCreneauxAsync(visite);
+
+        var creneauRetenu = creneaux.FirstOrDefault(c =>
+            c.IdAgent == saisie.IdAgent && c.HeureDebut == heureDemandee);
+
+        if (creneauRetenu is null)
+        {
+            return Conflict(new
+            {
+                message = $"Le créneau de {heureDemandee} n'est plus disponible pour "
+                          + $"{agent.Prenom} {agent.Nom}. Rafraîchissez la liste des agents disponibles."
+            });
+        }
+
+        visite.IdAgent = agent.IdUtilisateur;
+        visite.DatePrevue = visite.DateSouhaitee;
+        visite.HeurePrevue = saisie.HeureDebut;
+        visite.Statut = StatutVisite.ASSIGNEE;
+
         await _contexte.SaveChangesAsync();
 
         return Ok(VisiteDto.Depuis(visite));

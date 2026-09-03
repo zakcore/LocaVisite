@@ -41,6 +41,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<ServiceJeton>();
+builder.Services.AddScoped<ServiceRechercheAgents>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
