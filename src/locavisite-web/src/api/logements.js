@@ -23,3 +23,24 @@ export async function obtenirLogement(id) {
   const reponse = await client.get(`/api/logements/${id}`)
   return reponse.data
 }
+
+/** Vue de gestion : tous les logements, y compris les RETIRE. */
+export async function listerTousLesLogements() {
+  const reponse = await client.get('/api/logements/tous')
+  return reponse.data
+}
+
+export async function creerLogement(logement) {
+  const reponse = await client.post('/api/logements', logement)
+  return reponse.data
+}
+
+export async function modifierLogement(id, logement) {
+  const reponse = await client.put(`/api/logements/${id}`, logement)
+  return reponse.data
+}
+
+/** Retrait logique : le logement passe au statut RETIRE. */
+export async function retirerLogement(id) {
+  await client.delete(`/api/logements/${id}`)
+}

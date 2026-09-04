@@ -64,7 +64,7 @@ public class VisitesController : ControllerBase
             prospect = new Prospect
             {
                 Nom = demande.Nom,
-                Prenom = demande.Prenom,
+                Prenom = demande.Prenom ?? string.Empty,
                 Courriel = demande.Courriel,
                 Telephone = demande.Telephone,
                 PossedeMobile = demande.PossedeMobile,

@@ -8,11 +8,10 @@ const client = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
-// La partie publique n'a pas besoin de jeton, mais l'interface de gestion
-// des preposes (partie 5) en aura un. L'intercepteur est deja en place :
-// il joint le jeton des qu'il existe, et ne fait rien sinon.
+// La partie publique n'a pas besoin de jeton ; l'interface de gestion en a un.
+// L'intercepteur le joint des qu'il existe, et ne fait rien sinon.
 client.interceptors.request.use((config) => {
-  const jeton = localStorage.getItem('jeton')
+  const jeton = lireJeton()
 
   if (jeton) {
     config.headers.Authorization = `Bearer ${jeton}`
@@ -20,6 +19,16 @@ client.interceptors.request.use((config) => {
 
   return config
 })
+
+/** Le jeton vit dans sessionStorage : il disparait a la fermeture du navigateur. */
+function lireJeton() {
+  try {
+    const session = sessionStorage.getItem('locavisite.session')
+    return session ? JSON.parse(session).jeton : null
+  } catch {
+    return null
+  }
+}
 
 /**
  * Traduit une erreur axios en message lisible.

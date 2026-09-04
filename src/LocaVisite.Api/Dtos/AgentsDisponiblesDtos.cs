@@ -45,9 +45,9 @@ public class CreneauDto
 /// <summary>Créneau choisi par le préposé au moment d'assigner la visite.</summary>
 public class AssignationDto
 {
-    [Required]
+    [Required(ErrorMessage = "L'agent est obligatoire.")]
     public int IdAgent { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "L'heure de début du créneau est obligatoire.")]
     public TimeOnly HeureDebut { get; set; }
 }

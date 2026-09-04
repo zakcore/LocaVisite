@@ -57,6 +57,22 @@ public class LogementsController : ControllerBase
         return Ok(logements.Select(LogementDto.Depuis));
     }
 
+    /// <summary>
+    /// Vue de gestion : tous les logements, quel que soit leur statut,
+    /// y compris les `RETIRE` que le catalogue public masque.
+    /// </summary>
+    [HttpGet("tous")]
+    [Authorize(Roles = "PREPOSE,GESTIONNAIRE")]
+    public async Task<ActionResult<IEnumerable<LogementDto>>> ListerTous()
+    {
+        var logements = await _contexte.Logements
+            .OrderBy(l => l.Ville)
+            .ThenBy(l => l.Adresse)
+            .ToListAsync();
+
+        return Ok(logements.Select(LogementDto.Depuis));
+    }
+
     /// <summary>Fiche d'un logement.</summary>
     [HttpGet("{id:int}")]
     [AllowAnonymous]

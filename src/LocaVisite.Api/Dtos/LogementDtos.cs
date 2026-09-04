@@ -37,26 +37,26 @@ public class LogementDto
 /// <summary>Données acceptées à la création et à la modification d'un logement.</summary>
 public class LogementSaisieDto
 {
-    [Required]
-    [MaxLength(200)]
+    [Required(ErrorMessage = "L'adresse est obligatoire.")]
+    [MaxLength(200, ErrorMessage = "L'adresse ne peut pas dépasser 200 caractères.")]
     public string Adresse { get; set; } = string.Empty;
 
-    [Required]
-    [MaxLength(100)]
+    [Required(ErrorMessage = "La ville est obligatoire.")]
+    [MaxLength(100, ErrorMessage = "La ville ne peut pas dépasser 100 caractères.")]
     public string Ville { get; set; } = string.Empty;
 
-    [Required]
-    [MaxLength(10)]
+    [Required(ErrorMessage = "Le code postal est obligatoire.")]
+    [MaxLength(10, ErrorMessage = "Le code postal ne peut pas dépasser 10 caractères.")]
     public string CodePostal { get; set; } = string.Empty;
 
-    [Required]
-    [MaxLength(50)]
+    [Required(ErrorMessage = "Le type de logement est obligatoire.")]
+    [MaxLength(50, ErrorMessage = "Le type ne peut pas dépasser 50 caractères.")]
     public string Type { get; set; } = string.Empty;
 
-    [Range(1, 20)]
+    [Range(1, 20, ErrorMessage = "Le nombre de pièces doit être entre 1 et 20.")]
     public int NbPieces { get; set; }
 
-    [Range(0, 100000)]
+    [Range(0, 100000, ErrorMessage = "Le loyer mensuel doit être entre 0 et 100 000 $.")]
     public decimal LoyerMensuel { get; set; }
 
     public string? Description { get; set; }
