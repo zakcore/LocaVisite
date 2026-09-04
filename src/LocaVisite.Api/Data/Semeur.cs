@@ -70,6 +70,77 @@ public static class Semeur
         contexte.SaveChanges();
 
         SemerDisponibilites(contexte);
+        SemerVisiteDeReference(contexte);
+    }
+
+    /// <summary>
+    /// Sème la visite qui occupe l'agent dans le cas de référence de SPECIFICATIONS.md :
+    /// mardi 15 septembre 2026, de 15:00 à 15:30.
+    ///
+    /// Sans elle l'agent serait libre toute la plage, et la recherche
+    /// retournerait tous les créneaux au lieu du seul 14:00 attendu.
+    /// </summary>
+    private static void SemerVisiteDeReference(LocaVisiteContext contexte)
+    {
+        var dateReference = new DateOnly(2026, 9, 15);
+        var heureReference = new TimeOnly(15, 0);
+
+        var agent = contexte.Utilisateurs
+            .FirstOrDefault(u => u.Courriel == "agent@locavisite.ca");
+
+        var logement = contexte.Logements
+            .FirstOrDefault(l => l.Statut == StatutLogement.DISPONIBLE);
+
+        if (agent is null || logement is null)
+        {
+            return;
+        }
+
+        var dejaSemee = contexte.Visites.Any(v =>
+            v.IdAgent == agent.IdUtilisateur
+            && v.DatePrevue == dateReference
+            && v.HeurePrevue == heureReference);
+
+        if (dejaSemee)
+        {
+            return;
+        }
+
+        // Un prospect distinct de ceux des demandes, pour que le cas de
+        // référence ne dépende pas des essais faits depuis Swagger.
+        var prospect = contexte.Prospects
+            .FirstOrDefault(p => p.Courriel == "occupant@locavisite.ca");
+
+        if (prospect is null)
+        {
+            prospect = new Prospect
+            {
+                Nom = "Lavoie",
+                Prenom = "Simon",
+                Courriel = "occupant@locavisite.ca",
+                Telephone = "450-555-0188",
+                PossedeMobile = true,
+                DateCreation = DateTime.Now
+            };
+
+            contexte.Prospects.Add(prospect);
+        }
+
+        contexte.Visites.Add(new Visite
+        {
+            IdLogement = logement.IdLogement,
+            Prospect = prospect,
+            IdAgent = agent.IdUtilisateur,
+            DateSouhaitee = dateReference,
+            HeureSouhaiteeDebut = heureReference,
+            HeureSouhaiteeFin = new TimeOnly(16, 0),
+            DatePrevue = dateReference,
+            HeurePrevue = heureReference,
+            DureePrevue = 30,
+            Statut = StatutVisite.ASSIGNEE
+        });
+
+        contexte.SaveChanges();
     }
 
     /// <summary>
