@@ -10,6 +10,13 @@ namespace LocaVisite.Api.Models;
 [Table("VISITE")]
 public class Visite
 {
+    /// <summary>
+    /// Durée par défaut d'une visite, en minutes. C'est aussi la longueur
+    /// minimale qu'une plage proposée doit avoir : une plage plus courte ne
+    /// pourrait jamais accueillir de visite.
+    /// </summary>
+    public const int DureeParDefautMinutes = 30;
+
     [Key]
     [Column("id_visite")]
     public int IdVisite { get; set; }
@@ -45,7 +52,7 @@ public class Visite
 
     /// <summary>Durée prévue de la visite, en minutes.</summary>
     [Column("duree_prevue")]
-    public int DureePrevue { get; set; } = 30;
+    public int DureePrevue { get; set; } = DureeParDefautMinutes;
 
     [Column("statut")]
     public StatutVisite Statut { get; set; } = StatutVisite.DEMANDEE;
