@@ -34,6 +34,21 @@ public class VisitesController : ControllerBase
             return BadRequest(new { message = "L'heure de fin doit être postérieure à l'heure de début." });
         }
 
+        // Une plage plus courte qu'une visite ne pourra jamais être assignée :
+        // la recherche d'agents la rejetterait toujours. Autant la refuser
+        // tout de suite, pendant que le prospect peut encore la corriger.
+        var minutesPlage = (int)(demande.HeureSouhaiteeFin - demande.HeureSouhaiteeDebut).TotalMinutes;
+
+        if (minutesPlage < Visite.DureeParDefautMinutes)
+        {
+            return BadRequest(new
+            {
+                message = $"La plage proposée ne dure que {minutesPlage} minutes. "
+                          + $"Une visite dure au moins {Visite.DureeParDefautMinutes} minutes : "
+                          + "proposez une plage plus large."
+            });
+        }
+
         if (demande.DateSouhaitee < DateOnly.FromDateTime(DateTime.Today))
         {
             return BadRequest(new { message = "La date souhaitée ne peut pas être dans le passé." });
@@ -89,7 +104,7 @@ public class VisitesController : ControllerBase
             DateSouhaitee = demande.DateSouhaitee,
             HeureSouhaiteeDebut = demande.HeureSouhaiteeDebut,
             HeureSouhaiteeFin = demande.HeureSouhaiteeFin,
-            DureePrevue = 30,
+            DureePrevue = Visite.DureeParDefautMinutes,
             Statut = StatutVisite.DEMANDEE
         };
 

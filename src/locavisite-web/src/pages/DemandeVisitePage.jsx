@@ -8,6 +8,12 @@ import Chargement from '../components/Chargement'
 import MessageErreur from '../components/MessageErreur'
 import Introuvable from '../components/Introuvable'
 
+/**
+ * Duree par defaut d'une visite, en minutes. Doit rester alignee sur
+ * Visite.DureeParDefautMinutes cote API, qui refuse une plage plus courte.
+ */
+const DUREE_MINIMALE_MINUTES = 30
+
 const SAISIE_VIDE = {
   nom: '',
   prenom: '',
@@ -15,8 +21,16 @@ const SAISIE_VIDE = {
   telephone: '',
   possedeMobile: false,
   dateSouhaitee: '',
-  heureSouhaiteeDebut: '',
-  heureSouhaiteeFin: '',
+  heureSouhaiteeDebut: '13:00',
+  heureSouhaiteeFin: '16:00',
+}
+
+/** Nombre de minutes entre deux heures « hh:mm ». */
+function minutesEntre(debut, fin) {
+  const [hd, md] = debut.split(':').map(Number)
+  const [hf, mf] = fin.split(':').map(Number)
+
+  return (hf * 60 + mf) - (hd * 60 + md)
 }
 
 /**
@@ -41,6 +55,10 @@ function valider(saisie) {
   }
   if (saisie.heureSouhaiteeFin <= saisie.heureSouhaiteeDebut) {
     return "L'heure de fin doit être postérieure à l'heure de début."
+  }
+  if (minutesEntre(saisie.heureSouhaiteeDebut, saisie.heureSouhaiteeFin) < DUREE_MINIMALE_MINUTES) {
+    return `La plage proposée est trop courte : une visite dure au moins `
+      + `${DUREE_MINIMALE_MINUTES} minutes.`
   }
   if (saisie.dateSouhaitee < aujourdhui()) {
     return 'La date souhaitée ne peut pas être dans le passé.'
@@ -205,8 +223,9 @@ export default function DemandeVisitePage() {
         </div>
 
         <p className="formulaire__note">
-          Proposez une plage assez large : un préposé y placera la visite selon
-          les disponibilités de nos agents.
+          Proposez une plage d'au moins {DUREE_MINIMALE_MINUTES} minutes, et
+          si possible plus large : un préposé y placera la visite selon les
+          disponibilités de nos agents.
         </p>
 
         {erreur && <MessageErreur message={erreur} />}
