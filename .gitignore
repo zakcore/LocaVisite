@@ -487,6 +487,7 @@ $RECYCLE.BIN/
 TestResults/
 
 # Documentation de travail : conservee en local, hors du depot.
-# Retirer cette regle, ou ajouter une exception, pour publier un fichier
+# Retirer ces regles, ou ajouter une exception, pour publier un fichier
 # precis :  !src/locavisite-web/README.md
 *.md
+docs/
