@@ -491,3 +491,6 @@ TestResults/
 # precis :  !src/locavisite-web/README.md
 *.md
 docs/
+
+# Le README a la racine du depot, lui, est publie.
+!/README.md
