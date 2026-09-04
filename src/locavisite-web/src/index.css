@@ -1,0 +1,398 @@
+/* LocaVisite — feuille de style unique, sans bibliothèque de composants.
+   Mise en page adaptative : une seule colonne sur téléphone, plusieurs
+   cartes par rangée dès que la largeur le permet. */
+
+:root {
+  --encre: #1b2733;
+  --encre-douce: #5a6b7b;
+  --fond: #f4f6f8;
+  --surface: #ffffff;
+  --bordure: #d8dee5;
+  --accent: #1f5f8b;
+  --accent-fonce: #17486a;
+  --erreur: #a4243b;
+  --erreur-fond: #fdecef;
+  --rayon: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--encre);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0 0 1rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+}
+
+.application {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* --- En-tête --- */
+
+.entete {
+  background: var(--accent);
+  color: #fff;
+}
+
+.entete__contenu {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.entete__marque {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.entete__lien {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.entete__lien:hover {
+  text-decoration: underline;
+}
+
+/* --- Contenu --- */
+
+.contenu {
+  flex: 1;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+.pied {
+  border-top: 1px solid var(--bordure);
+  padding: 1rem;
+  text-align: center;
+  color: var(--encre-douce);
+  font-size: 0.85rem;
+}
+
+/* --- Filtres --- */
+
+.filtres {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filtres__champs {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+
+.filtres__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  flex-wrap: wrap;
+}
+
+/* --- Champs --- */
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.champ > span {
+  color: var(--encre-douce);
+  font-weight: 600;
+}
+
+.champ input {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  font: inherit;
+  background: #fff;
+  min-width: 0;
+}
+
+.champ input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.champ--case {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.9rem 0;
+}
+
+.champ--case span {
+  font-weight: 400;
+  color: var(--encre);
+}
+
+/* --- Boutons --- */
+
+.bouton {
+  display: inline-block;
+  padding: 0.55rem 1.1rem;
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bouton:hover:not(:disabled) {
+  background: var(--accent-fonce);
+}
+
+.bouton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.bouton--secondaire {
+  background: transparent;
+  color: var(--accent);
+}
+
+.bouton--secondaire:hover {
+  background: #e8eef4;
+}
+
+/* --- Catalogue --- */
+
+.compte {
+  color: var(--encre-douce);
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem;
+}
+
+.grille {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.carte {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  transition: box-shadow 0.15s ease;
+}
+
+.carte:hover {
+  box-shadow: 0 2px 10px rgb(27 39 51 / 12%);
+}
+
+.carte__lien {
+  display: block;
+  padding: 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.carte__ville {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--encre-douce);
+}
+
+.carte__adresse {
+  margin: 0.2rem 0 0.4rem;
+  font-size: 1.05rem;
+}
+
+.carte__details {
+  margin: 0;
+  color: var(--encre-douce);
+  font-size: 0.9rem;
+}
+
+.carte__loyer {
+  margin: 0.6rem 0 0;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* --- Fiche --- */
+
+.fiche,
+.formulaire,
+.confirmation {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1.25rem;
+}
+
+.fiche__ville {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--encre-douce);
+}
+
+.fiche__loyer {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 1rem;
+}
+
+.fiche__caracteristiques {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+  margin: 0 0 1.25rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--bordure);
+  border-bottom: 1px solid var(--bordure);
+}
+
+.fiche__caracteristiques dt {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--encre-douce);
+}
+
+.fiche__caracteristiques dd {
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+}
+
+.fiche__description p {
+  margin: 0.4rem 0 1.25rem;
+}
+
+.fiche__actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+/* --- Formulaire --- */
+
+.formulaire__logement {
+  margin: -0.4rem 0 1.2rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--bordure);
+  color: var(--encre-douce);
+}
+
+.formulaire__ligne {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+  margin-bottom: 0.9rem;
+}
+
+.formulaire__note {
+  color: var(--encre-douce);
+  font-size: 0.85rem;
+  margin: 1rem 0;
+}
+
+/* --- États --- */
+
+.etat {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1.25rem;
+  color: var(--encre-douce);
+}
+
+.etat--erreur {
+  background: var(--erreur-fond);
+  border-color: var(--erreur);
+  color: var(--erreur);
+}
+
+.etat--erreur p {
+  margin: 0 0 0.6rem;
+}
+
+.etat--erreur p:only-child {
+  margin: 0;
+}
+
+/* --- À partir d'une tablette --- */
+
+@media (min-width: 620px) {
+  .filtres__champs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .formulaire__ligne {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fiche__caracteristiques {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grille {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  h1 {
+    font-size: 1.9rem;
+  }
+}
+
+/* --- À partir d'un ordinateur --- */
+
+@media (min-width: 900px) {
+  .filtres__champs {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .fiche__caracteristiques {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .grille {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
