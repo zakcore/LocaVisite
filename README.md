@@ -17,7 +17,7 @@ pendant cette plage, et en assigne un.
 |---|---|
 | API REST (ASP.NET Core) | authentification, logements, demandes de visite, disponibilités, recherche d'agents, assignation |
 | Site Web public (React) | catalogue filtrable, fiche de logement, demande de visite |
-| Interface de gestion (React) | branche `partie-5-web-gestion`, pas encore fusionnée |
+| Interface de gestion (React) | connexion, logements, visites, assignation, disponibilités |
 | Application mobile des agents | à venir |
 
 ## Pile technique
@@ -67,7 +67,8 @@ npm install
 npm run dev
 ```
 
-Le site s'ouvre sur <http://localhost:5173>.
+Le site s'ouvre sur <http://localhost:5173> : le catalogue public à la racine,
+et l'interface des préposés sous `/gestion` après connexion.
 
 L'adresse de l'API se configure dans `.env.development` (`VITE_API_URL`). Cette
 origine doit aussi figurer dans `OriginesAutorisees` de `appsettings.json`,
