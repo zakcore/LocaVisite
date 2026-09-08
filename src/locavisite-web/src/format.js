@@ -31,3 +31,8 @@ export function aujourdhui() {
 
   return `${maintenant.getFullYear()}-${mois}-${jour}`
 }
+
+/** Jours de la semaine, indexes comme DayOfWeek : 0 = dimanche. */
+export const JOURS_SEMAINE = [
+  'dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi',
+]

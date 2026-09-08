@@ -41,10 +41,6 @@ function minutesEntre(debut, fin) {
  */
 function valider(saisie) {
   if (!saisie.nom.trim()) return 'Le nom est obligatoire.'
-  // Le prenom est obligatoire cote API (DemandeVisiteDto.Prenom est [Required]),
-  // meme si l'enonce de la partie 4 ne le listait pas. On l'exige ici pour
-  // eviter un 400 dont le message serait en anglais.
-  if (!saisie.prenom.trim()) return 'Le prénom est obligatoire.'
   if (!saisie.courriel.trim()) return 'Le courriel est obligatoire.'
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(saisie.courriel)) {
     return "Le format du courriel n'est pas valide."
@@ -175,9 +171,9 @@ export default function DemandeVisitePage() {
           </label>
 
           <label className="champ">
-            <span>Prénom *</span>
+            <span>Prénom</span>
             <input type="text" value={saisie.prenom}
-              onChange={(e) => modifier('prenom', e.target.value)} required />
+              onChange={(e) => modifier('prenom', e.target.value)} />
           </label>
         </div>
 

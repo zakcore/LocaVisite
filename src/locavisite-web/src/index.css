@@ -396,3 +396,269 @@ h2 {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ==========================================================================
+   Interface de gestion
+   ========================================================================== */
+
+.entete__contenu {
+  align-items: center;
+}
+
+.entete__nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.entete__session {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.entete__utilisateur {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.entete__lien.active {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 600;
+}
+
+.entete-page {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.entete-page h1 {
+  margin: 0;
+}
+
+/* --- Panneaux --- */
+
+.panneau {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.panneau h2 {
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--bordure);
+}
+
+.panneau h2 + h2,
+.plages + h2 {
+  margin-top: 1.5rem;
+}
+
+/* --- Champs supplémentaires --- */
+
+.champ select,
+.champ textarea {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  font: inherit;
+  background: #fff;
+  min-width: 0;
+}
+
+.champ textarea {
+  resize: vertical;
+}
+
+.formulaire--etroit {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.filtres__champs--deux {
+  grid-template-columns: 1fr;
+}
+
+/* --- Tableaux --- */
+
+.tableau-defilant {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+}
+
+.tableau {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  min-width: 720px;
+}
+
+.tableau th,
+.tableau td {
+  padding: 0.65rem 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid var(--bordure);
+  vertical-align: top;
+}
+
+.tableau th {
+  background: #eef2f6;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--encre-douce);
+  white-space: nowrap;
+}
+
+.tableau tr:last-child td {
+  border-bottom: none;
+}
+
+.tableau__actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.discret {
+  color: var(--encre-douce);
+  font-size: 0.85rem;
+}
+
+/* --- Étiquettes de statut ---
+   Chaque statut garde son libellé écrit : la couleur ne porte jamais
+   l'information à elle seule. */
+
+.etiquette {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.etiquette--demandee   { background: #fff5e0; border-color: #b57700; color: #7a5100; }
+.etiquette--assignee   { background: #e6f0f8; border-color: #1f5f8b; color: #17486a; }
+.etiquette--en_route   { background: #eae6f8; border-color: #5b46a8; color: #3f3178; }
+.etiquette--en_cours   { background: #e3f3ec; border-color: #1d7a53; color: #14563a; }
+.etiquette--terminee   { background: #e8ebee; border-color: #55636f; color: #3b464f; }
+.etiquette--annulee    { background: #fdecef; border-color: #a4243b; color: #7c1b2c; }
+
+.etiquette--disponible { background: #e3f3ec; border-color: #1d7a53; color: #14563a; }
+.etiquette--reserve    { background: #fff5e0; border-color: #b57700; color: #7a5100; }
+.etiquette--loue       { background: #e6f0f8; border-color: #1f5f8b; color: #17486a; }
+.etiquette--retire     { background: #e8ebee; border-color: #55636f; color: #3b464f; }
+
+/* --- Boutons supplémentaires --- */
+
+.bouton--petit {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+.bouton--danger {
+  background: var(--erreur);
+  border-color: var(--erreur);
+  color: #fff;
+}
+
+.bouton--danger:hover:not(:disabled) {
+  background: #851c2f;
+}
+
+.bouton--clair {
+  background: transparent;
+  border-color: rgb(255 255 255 / 60%);
+  color: #fff;
+}
+
+.bouton--clair:hover:not(:disabled) {
+  background: rgb(255 255 255 / 15%);
+}
+
+/* --- Assignation --- */
+
+.assignation__duree {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.creneaux {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bordure);
+}
+
+.creneaux__liste,
+.plages {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.creneau,
+.plage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  background: #fbfcfd;
+  flex-wrap: wrap;
+}
+
+.plage__jour {
+  text-transform: capitalize;
+}
+
+.etat--avertissement {
+  background: #fff5e0;
+  border-color: #b57700;
+  color: #7a5100;
+  margin-top: 0.9rem;
+}
+
+.etat--avertissement p {
+  margin: 0.35rem 0 0;
+}
+
+.message-succes {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.85rem;
+  background: #e3f3ec;
+  border: 1px solid #1d7a53;
+  border-radius: 6px;
+  color: #14563a;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 620px) {
+  .filtres__champs--deux {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .formulaire__ligne--trois {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

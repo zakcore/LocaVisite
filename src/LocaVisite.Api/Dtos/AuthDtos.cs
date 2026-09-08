@@ -5,11 +5,11 @@ namespace LocaVisite.Api.Dtos;
 /// <summary>Identifiants soumis au moment de la connexion.</summary>
 public class ConnexionDto
 {
-    [Required]
-    [EmailAddress]
+    [Required(ErrorMessage = "Le courriel est obligatoire.")]
+    [EmailAddress(ErrorMessage = "Le format du courriel n'est pas valide.")]
     public string Courriel { get; set; } = string.Empty;
 
-    [Required]
+    [Required(ErrorMessage = "Le mot de passe est obligatoire.")]
     public string MotDePasse { get; set; } = string.Empty;
 }
 

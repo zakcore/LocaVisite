@@ -51,12 +51,12 @@ public class DisponibiliteDto
 public class DisponibiliteSaisieDto
 {
     /// <summary>0 = dimanche, 6 = samedi.</summary>
-    [Range(0, 6)]
+    [Range(0, 6, ErrorMessage = "Le jour de la semaine doit être entre 0 (dimanche) et 6 (samedi).")]
     public int JourSemaine { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "L'heure de début est obligatoire.")]
     public TimeOnly HeureDebut { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "L'heure de fin est obligatoire.")]
     public TimeOnly HeureFin { get; set; }
 }

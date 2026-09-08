@@ -6,34 +6,33 @@ namespace LocaVisite.Api.Dtos;
 /// <summary>Demande de visite soumise par un prospect, sans authentification.</summary>
 public class DemandeVisiteDto
 {
-    [Required]
+    [Required(ErrorMessage = "Le logement est obligatoire.")]
     public int IdLogement { get; set; }
 
-    [Required]
-    [MaxLength(100)]
+    [Required(ErrorMessage = "Le nom est obligatoire.")]
+    [MaxLength(100, ErrorMessage = "Le nom ne peut pas dépasser 100 caractères.")]
     public string Nom { get; set; } = string.Empty;
 
-    [Required]
-    [MaxLength(100)]
-    public string Prenom { get; set; } = string.Empty;
+    [MaxLength(100, ErrorMessage = "Le prénom ne peut pas dépasser 100 caractères.")]
+    public string? Prenom { get; set; }
 
-    [Required]
-    [EmailAddress]
-    [MaxLength(200)]
+    [Required(ErrorMessage = "Le courriel est obligatoire.")]
+    [EmailAddress(ErrorMessage = "Le format du courriel n'est pas valide.")]
+    [MaxLength(200, ErrorMessage = "Le courriel ne peut pas dépasser 200 caractères.")]
     public string Courriel { get; set; } = string.Empty;
 
-    [MaxLength(20)]
+    [MaxLength(20, ErrorMessage = "Le téléphone ne peut pas dépasser 20 caractères.")]
     public string? Telephone { get; set; }
 
     public bool PossedeMobile { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "La date souhaitée est obligatoire.")]
     public DateOnly DateSouhaitee { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "L'heure de début est obligatoire.")]
     public TimeOnly HeureSouhaiteeDebut { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "L'heure de fin est obligatoire.")]
     public TimeOnly HeureSouhaiteeFin { get; set; }
 }
 
@@ -106,6 +105,6 @@ public class VisiteDto
 /// <summary>Durée prévue fixée par le préposé, en minutes.</summary>
 public class DureeVisiteDto
 {
-    [Range(15, 240)]
+    [Range(15, 240, ErrorMessage = "La durée doit être entre 15 et 240 minutes.")]
     public int DureePrevue { get; set; }
 }
